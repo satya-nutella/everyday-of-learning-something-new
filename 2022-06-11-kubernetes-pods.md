@@ -51,3 +51,54 @@ Get all pods:
 ```
 kubectl get pods
 ```
+
+## YAML in K8S
+
+In k8s, definition YAML files are used as inputs to create k8s objects (Pods, Deployments, ReplicaSets, etc). The general syntax of a k8s definition file is:
+
+
+| Kind       | Version |
+| ---------- | ------- |
+| Pod        | v1      |
+| Service    | v1      |
+| ReplicaSet | apps/v1 |
+| Deployment | apps/v1 |
+
+```yaml
+apiVersion: # api version used to create an object. eg. v1 / apps/v1
+kind: # k8s object to create. eg. Pods, ReplicaSet, Service, Deployment, etc
+metadata: # should container specific fields understandable by k8s
+  name: # name of the object
+  labels: # set of key value pairs for filtering/identification. This can have any key-value pairs as you need
+spec: # actual object configuration. Varies as per the object
+```
+
+## Pods as YAML
+
+```yaml
+# pod-definition.yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mongodb-pod
+  labels:
+    app: mongodb
+    type: database
+ spec:
+   containers: # List of containers within the Pod. Usually, we will only have one unless a multi-container pod
+     - name: mongodb-container # Name of the container
+       image: mongo # Container image
+```
+
+To deploy the Pod, run:
+
+```
+kubectl create -f pod-definition.yaml
+```
+
+To describe the pod once deployed inside a cluster:
+
+```
+kubectl describe pod mongodb-pod
+```
